@@ -11,9 +11,9 @@ def parse_plex_webhooks(context: dict):
     try:
         data = context['payload']
         event = json.loads(str(data[0]))
-        if event['event'] == "media.play":
+        if event['event'] == "media.play" or event['event'] == "media.resume":
             return Event(EVENT_START, event['Player']['publicAddress'], True, event['Player']['local'])
-        if event['event'] == "media.stop":
+        if event['event'] == "media.stop" or event['event'] == "media.pause":
             return Event(EVENT_STOP, event['Player']['publicAddress'], True, event['Player']['local'])
         return Event(EVENT_OTHER, event['Session']['RemoteEndPoint'], True, event['Player']['local'])
     except Exception as e:
@@ -26,11 +26,11 @@ def get_plex_playing_session_count():
         sessions = plex_client.sessions()
         count = 0
         for session in sessions:
-            if not session.player.local:
+            if not session.player.local and not session.isPlayed:
                 count += 1
-                logger.info("监测到Plex外网用户{}({})正在播放".format(session.name, session.player.address))
+                logger.info("监测到Plex用户{0}在外网地址{1}正在播放{2}".format(session.user.username, session.player.address, session.grandparentTitle))
         logger.info("当前Plex外网播放会话数:{}".format(count))
         return count
     except Exception as e:
-        logger.error("解析emby session api错误:{}".format(e))
+        logger.error("解析Plex session api错误:{}".format(e))
         return 0
