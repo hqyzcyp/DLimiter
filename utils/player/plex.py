@@ -26,7 +26,7 @@ def get_plex_playing_session_count():
         sessions = plex_client.sessions()
         count = 0
         for session in sessions:
-            if not session.player.local and not session.isPlayed:
+            if not session.player.local and session.isPlayed:
                 count += 1
                 logger.info("监测到Plex用户{0}在外网地址{1}正在播放{2}".format(session.user.username, session.player.address, session.grandparentTitle))
         logger.info("当前Plex外网播放会话数:{}".format(count))
