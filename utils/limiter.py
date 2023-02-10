@@ -138,4 +138,4 @@ def plex_apply_limit(context: dict):
                     player_type, event.endpoint, downloader.name, downloader.origin_speed_down,
                     downloader.origin_speed_up))
         else:
-            logger.info("监测到{}外网({})播放停止，触发取消限速，但是Emby还有其他外网用户在播放，跳过".format(player_type, event.endpoint))
+            logger.info("监测到{}外网({})播放停止，触发取消限速，但是Plex还有其他外网用户在播放，跳过".format(player_type, event.endpoint))
