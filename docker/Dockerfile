@@ -3,7 +3,7 @@ FROM python:3.10-alpine
 ENV LANG="C.UTF-8" \
     TZ="Asia/Shanghai" \
     PS1="\u@\h:\w \$ " \
-    DLIMITER_REPO_URL="https://github.com/Steve0x2a/DLimiter" \
+    DLIMITER_REPO_URL="https://github.com/hqyzcyp/DLimiter" \
     DLIMITER_BRANCH=main \
     WORKDIR="/app" \
     DLIMITER_CN_UPDATE=true \
