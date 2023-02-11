@@ -3,7 +3,7 @@ from utils.player.event import Event
 from utils.player.emby import parse_emby_webhooks, get_emby_playing_session_count
 from utils.player.jellyfin import parse_jellyfin_webhooks, get_jellyfin_playing_session_count
 from utils.player.plex import parse_plex_webhooks, get_plex_playing_session_count
-from utils.ip_check import check_ip_if_internal
+from utils.ip_check import check_ip_if_internal, check_ip_if_exclude
 from quart import current_app as app
 from const import *
 from log import logger
@@ -107,7 +107,7 @@ def plex_apply_limit(context: dict):
         logger.debug("事件类型不属于触发类型，跳过")
         return
     # Plex 没提供地址，但是提供了local字段，因此暂时用这个判断是否为外网
-    if event.is_local:
+    if event.is_local or not check_ip_if_exclude(event.endpoint, Config().cfg.limiter.exclude_ip or []):
         logger.info("本地播放事件，跳过")
         return
 
