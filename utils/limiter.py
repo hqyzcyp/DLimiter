@@ -107,7 +107,7 @@ def plex_apply_limit(context: dict):
         logger.debug("事件类型不属于触发类型，跳过")
         return
     # Plex 没提供地址，但是提供了local字段，因此暂时用这个判断是否为外网
-    if event.is_local or not check_ip_if_exclude(event.endpoint, Config().cfg.limiter.exclude_ip or []):
+    if event.is_local and check_ip_if_exclude(event.endpoint, Config().cfg.limiter.exclude_ip or []):
         logger.info("本地播放事件，跳过")
         return
 

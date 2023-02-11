@@ -1,6 +1,8 @@
 import json
 from const import *
 import requests
+
+from utils.ip_check import check_ip_if_exclude
 from utils.player.event import Event
 from client.player.plex import plex_client
 from conf import Config
@@ -26,9 +28,13 @@ def get_plex_playing_session_count():
         sessions = plex_client.sessions()
         count = 0
         for session in sessions:
-            if not session.player.local and session.player.state == "playing":
+            if not session.player.local and check_ip_if_exclude(session.player.address,
+                                                                Config().cfg.limiter.exclude_ip or []) \
+                    and session.player.state == "playing":
                 count += 1
-                logger.info("监测到Plex用户{0}在外网地址{1}正在播放{2}".format(session.user.username, session.player.address, session.grandparentTitle))
+                logger.info(
+                    "监测到Plex用户{0}在外网地址{1}正在播放{2}".format(session.user.username, session.player.address,
+                                                                       session.grandparentTitle))
         logger.info("当前Plex外网播放会话数:{}".format(count))
         return count
     except Exception as e:
