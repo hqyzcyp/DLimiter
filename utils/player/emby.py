@@ -13,6 +13,8 @@ def parse_emby_webhooks(context: dict):
         data = context['data']
         item = data[0]
         event = json.loads(str(item))
+        if event['Event'] == "media.scrobble":
+            return Event(EVENT_OTHER, event['Session']['RemoteEndPoint'], True)
         if event['Event'] == "playback.start" or event['Event'] == "playback.unpause":
             return Event(EVENT_START, event['Session']['RemoteEndPoint'], True)
         if event['Event'] == "playback.stop" or event['Event'] == "playback.pause":
