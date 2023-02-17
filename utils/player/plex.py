@@ -13,6 +13,8 @@ def parse_plex_webhooks(context: dict):
     try:
         data = context['payload']
         event = json.loads(str(data[0]))
+        if event['event'] == "media.scrobble":
+            return Event(EVENT_OTHER, event['Player']['publicAddress'], True, event['Player']['local'])
         if event['event'] == "media.play" or event['event'] == "media.resume":
             return Event(EVENT_START, event['Player']['publicAddress'], True, event['Player']['local'])
         if event['event'] == "media.stop" or event['event'] == "media.pause":
