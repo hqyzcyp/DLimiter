@@ -35,7 +35,8 @@ def emby_apply_limit(context: dict):
         Config().limit_client[player_type] = True
 
     if event.event == EVENT_STOP:
-
+        logger.info("检测到Emby外网暂停播放事件，程序暂停运行{}s".format(Config().cfg.limiter.delay_time))
+        time.sleep(Config().cfg.limiter.delay_time)
         if get_emby_playing_session_count(Config().cfg.emby.url, Config().cfg.emby.api_key) == 0:
             Config().limit_client[player_type] = False
             if any(Config().limit_client.values()):
@@ -122,7 +123,8 @@ def plex_apply_limit(context: dict):
         Config().limit_client[player_type] = True
 
     if event.event == EVENT_STOP:
-
+        logger.info("检测到Plex外网暂停播放事件，程序暂停运行{}s".format(Config().cfg.limiter.delay_time))
+        time.sleep(Config().cfg.limiter.delay_time)
         if get_plex_playing_session_count() == 0:
             Config().limit_client[player_type] = False
             if any(Config().limit_client.values()):
