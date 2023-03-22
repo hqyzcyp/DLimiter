@@ -19,7 +19,7 @@ def parse_plex_webhooks(context: dict):
             return Event(EVENT_START, event['Player']['publicAddress'], True, event['Player']['local'])
         if event['event'] == "media.stop" or event['event'] == "media.pause":
             return Event(EVENT_STOP, event['Player']['publicAddress'], True, event['Player']['local'])
-        return Event(EVENT_OTHER, event['Session']['RemoteEndPoint'], True, event['Player']['local'], event['Metadata']['type'])
+        return Event(EVENT_OTHER, event['Session']['RemoteEndPoint'], True, event['Player']['local'])
     except Exception as e:
         logger.error("解析Plex webhooks错误:{},context:{}".format(e, context))
         return Event()
