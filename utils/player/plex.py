@@ -13,13 +13,13 @@ def parse_plex_webhooks(context: dict):
     try:
         data = context['payload']
         event = json.loads(str(data[0]))
-        if event['event'] == "media.scrobble":
+        if event['event'] == "media.scrobble" or event['Metadata']['type'] == 'track':
             return Event(EVENT_OTHER, event['Player']['publicAddress'], True, event['Player']['local'])
         if event['event'] == "media.play" or event['event'] == "media.resume":
             return Event(EVENT_START, event['Player']['publicAddress'], True, event['Player']['local'])
         if event['event'] == "media.stop" or event['event'] == "media.pause":
             return Event(EVENT_STOP, event['Player']['publicAddress'], True, event['Player']['local'])
-        return Event(EVENT_OTHER, event['Session']['RemoteEndPoint'], True, event['Player']['local'])
+        return Event(EVENT_OTHER, event['Session']['RemoteEndPoint'], True, event['Player']['local'], event['Metadata']['type'])
     except Exception as e:
         logger.error("解析Plex webhooks错误:{},context:{}".format(e, context))
         return Event()
