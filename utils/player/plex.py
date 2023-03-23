@@ -32,7 +32,7 @@ def get_plex_playing_session_count():
         for session in sessions:
             if not session.player.local and check_ip_if_exclude(session.player.address,
                                                                 Config().cfg.limiter.exclude_ip or []) \
-                    and session.player.state == "playing":
+                    and session.player.state == "playing" and session.type != "track":
                 count += 1
                 logger.info(
                     "监测到Plex用户{0}在外网地址{1}正在播放{2}".format(session.user.username, session.player.address,
